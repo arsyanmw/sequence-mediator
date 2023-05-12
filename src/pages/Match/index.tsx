@@ -48,7 +48,7 @@ const MatchPage = () => {
                 </div>
                 <div className='option-wrapper mt-5'>
                     <div className="pause-button flex justify-center">
-                        <button className='rounded-full w-20 h-20 shadow-md flex justify-center items-center text-lg font-semibold' onClick={setPaused} disabled={match?.status === 0}>{match?.isPaused ? 'Play' : 'Paused'}</button>
+                        <button className={`rounded-full w-20 h-20 shadow-md flex justify-center items-center text-lg font-semibold ${match?.status === 0 && ' bg-slate-200 text-slate-500'}`} onClick={setPaused} disabled={match?.status === 0}>{match?.isPaused ? 'Play' : 'Paused'}</button>
                     </div>
                     <div className="player-control flex justify-between mt-5">
                         {match?.players && match.players.map((player: Players, idx: number) => (
