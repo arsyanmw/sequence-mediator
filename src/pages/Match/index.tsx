@@ -29,9 +29,17 @@ const MatchPage = () => {
 
     const setViolation = (playerId: number) => {
         let currData = match;
-
         if (currData) {
             currData.players[playerId].isViolation = !currData.players[playerId].isViolation
+
+            update(ref(db, 'matches/' + matchId), currData);
+        }
+    }
+
+    const setFinished = () => {
+        let currData = match;
+        if (currData?.status === 1) {
+            currData.status = 0;
 
             update(ref(db, 'matches/' + matchId), currData);
         }
@@ -59,10 +67,17 @@ const MatchPage = () => {
                         ))}
                     </div>
                 </div>
-                <div className="back flex justify-center mt-10">
-                    <Link to='/'>
-                        <button className='rounded-full p-3 shadow-md'>Kembali</button>
-                    </Link>
+                <div className="buttons flex justify-center">
+                    <div className="back flex justify-center mt-10">
+                        <Link to='/'>
+                            <button className='rounded-full p-3 shadow-md'>Kembali</button>
+                        </Link>
+                    </div>
+                    {match?.status === 1 && (
+                        <div className="back flex justify-center mt-10 ms-2">
+                            <button className='rounded-full p-3 shadow-md bg-lime-400 text-white' onClick={setFinished}>Set Finished</button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
