@@ -16,7 +16,7 @@ const MatchPage = () => {
                 setMatch(matchData);
             }
         })
-    }, [])
+    }, [matchId])
 
     const setPaused = () => {
         let currData = match;
@@ -41,16 +41,20 @@ const MatchPage = () => {
         <div className='container mx-auto p-4'>
             <div className='wrapper w-100 h-fit'>
                 <div className='title flex justify-center'>{match?.players.length === 2 && (<p className='text-3xl font-bold'>{match.players[0].name} VS {match.players[1].name}</p>)}</div>
-                <div className='mediator flex justify-center'><span>Mediator</span> <span className='rounded-full px-2 ms-2 bg-amber-500'>{match?.mediatorName}</span></div>
+                <div className='mediator flex justify-center mt-1'><span>Mediator</span> <span className='rounded-full px-2 ms-2 bg-amber-500'>{match?.mediatorName}</span></div>
+                <div className="status flex justify-center mt-1">
+                    {match?.status === 1 && (<span className='rounded-full px-2 ms-2 bg-lime-400'>On Going</span>)}
+                    {match?.status === 0 && (<span className='rounded-full px-2 ms-2 bg-slate-400'>Finished</span>)}
+                </div>
                 <div className='option-wrapper mt-5'>
                     <div className="pause-button flex justify-center">
-                        <button className='rounded-full w-20 h-20 shadow-md flex justify-center items-center text-lg font-semibold' onClick={setPaused}>{match?.isPaused ? 'Play' : 'Paused'}</button>
+                        <button className='rounded-full w-20 h-20 shadow-md flex justify-center items-center text-lg font-semibold' onClick={setPaused} disabled={match?.status === 0}>{match?.isPaused ? 'Play' : 'Paused'}</button>
                     </div>
                     <div className="player-control flex justify-between mt-5">
                         {match?.players && match.players.map((player: Players, idx: number) => (
                             <div className='w-100 h-100 flex flex-col justify-center items-center shadow-md p-4 rounded-lg' key={idx}>
                                 <p className='mb-5 text-lg font-semibold'>{player.name}</p>
-                                <button className={!player.isViolation ? 'text-white rounded-lg p-3 bg-rose-500 hover:bg-rose-400' : 'text-white rounded-lg p-3 bg-rose-200'} disabled={player.isViolation} onClick={() => setViolation(idx)}>Penalty</button>
+                                <button className={(!player.isViolation && match.status !== 0) ? 'text-white rounded-lg p-3 bg-rose-500 hover:bg-rose-400' : 'text-white rounded-lg p-3 bg-rose-200'} disabled={player.isViolation && match.status !== 0} onClick={() => setViolation(idx)}>Penalty</button>
                             </div>
                         ))}
                     </div>
