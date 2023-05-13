@@ -22,6 +22,22 @@ const MatchPage = () => {
         let currData = match;
         if (currData) {
             currData.isPaused = !currData.isPaused;
+            console.log(currData.isPaused);
+            
+
+            if (currData.isPaused) {
+                currData.players.map((player, id) => {
+                    if (player.onTurn) {
+                        if (currData) {
+                            currData.lastPlayerRun = id;
+                        }
+                    }
+
+                    return player.onTurn = false;
+                })
+            } else {
+                currData.players[currData.lastPlayerRun].onTurn = true;
+            }
 
             update(ref(db, 'matches/' + matchId), currData);
         }
@@ -30,8 +46,8 @@ const MatchPage = () => {
     const setViolation = (playerId: number) => {
         let currData = match;
         if (currData) {
-            if (currData.players[playerId].time === 60) {
-                currData.players[playerId].time -= 30;
+            if (currData.players[playerId].time !== 30) {
+                currData.players[playerId].time = 30;
             }
             currData.players[playerId].isViolation = !currData.players[playerId].isViolation
 
