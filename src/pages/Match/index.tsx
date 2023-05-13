@@ -30,6 +30,9 @@ const MatchPage = () => {
     const setViolation = (playerId: number) => {
         let currData = match;
         if (currData) {
+            if (currData.players[playerId].time === 60) {
+                currData.players[playerId].time -= 30;
+            }
             currData.players[playerId].isViolation = !currData.players[playerId].isViolation
 
             update(ref(db, 'matches/' + matchId), currData);
