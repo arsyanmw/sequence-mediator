@@ -35,9 +35,9 @@ const HomePage = () => {
                 <div className='list'>
                     {matches && matches.map((match: Matches, idx: number) => {
                         return (
-                            <Link to={`/match/${idx}`} key={match.name}>
+                            <Link to={`/match/${idx}`} key={idx}>
                                 <div className='card-list p-3 w-100 flex justify-between flex-row  rounded-lg shadow-md mb-5'>
-                                    <p>{ match.name.charAt(0).toUpperCase() + match.name.slice(1) } <span className={'px-2 rounded-full text-xs ' + (match.status === 1 ? 'bg-lime-400' : 'bg-slate-400')}>{ match.status === 1 ? 'On Going' : 'Finished' }</span></p>
+                                    <p>Match-{idx} <span className={'px-2 rounded-full text-xs ' + (match.status === 1 ? 'bg-lime-400' : 'bg-slate-400')}>{ match.status === 1 ? 'On Going' : 'Finished' }</span></p>
                                     {match.players.length === 2 && (
                                         <p>{match.players[0].name} VS {match.players[1].name}</p>
                                     )}
