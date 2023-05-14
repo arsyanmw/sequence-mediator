@@ -36,7 +36,7 @@ const HomePage = () => {
                         return (
                             <Link to={`/match/${idx}`} key={idx}>
                                 <div className='card-list p-3 w-100 flex justify-between flex-row  rounded-lg shadow-md mb-5'>
-                                    <p>Match-{idx + 1} <span className={'px-2 rounded-full text-xs ' + (match.status === 1 ? 'bg-lime-400' : 'bg-slate-400')}>{ match.status === 1 ? 'On Going' : 'Finished' }</span></p>
+                                    <p>Match-{idx + 1} <span className={'px-2 rounded-full text-xs ' + (match?.status === 1 ? 'bg-lime-400' : 'bg-slate-400')}>{ match?.status === 1 ? 'On Going' : 'Finished' }</span></p>
                                     <div className='flex justify-center'>{WinTag(match.players, match.winner)}</div>
                                 </div>
                             </Link>

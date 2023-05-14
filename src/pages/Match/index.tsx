@@ -19,9 +19,12 @@ const MatchPage = () => {
         onValue(ref(db, 'matches/'), snapshot => {
             if (snapshot.exists()) {
                 const matchData: Matches = snapshot.val()[matchId]
+                if (!matchData) {
+                    history.push('/');
+                }
                 setMatch(matchData);
 
-                const shouldShowModal = matchData.status === Statuses.ongoing && matchData.totalTurnMatch !== 0 && matchData.totalTurnMatch % 10 === 0;
+                const shouldShowModal = matchData?.status === Statuses.ongoing && matchData.totalTurnMatch !== 0 && matchData.totalTurnMatch % 10 === 0;
                 setShowModalCardCheck(shouldShowModal);
             }
         })
@@ -121,7 +124,7 @@ const MatchPage = () => {
                                     <p className='text-lg font-semibold rounded-full bg-white px-2'>{player.name}</p>
                                     <p className='mb-5 text-lg text-white font-semibold'>{player.totalTurn}</p>
                                     <button
-                                        className={(!player.isViolation && match.status !== 0) ? 'text-white rounded-lg p-3 bg-rose-500 bg-orange-600 hover:bg-orange-400' : 'text-white rounded-lg p-3 bg-rose-200'}
+                                        className={(!player.isViolation && match.status !== 0) ? 'text-white rounded-lg p-3 bg-orange-600 hover:bg-orange-400' : 'text-white rounded-lg p-3 bg-rose-200'}
                                         disabled={player.isViolation && match.status !== 0}
                                         onClick={() => setViolation(idx)}>Penalty
                                     </button>
