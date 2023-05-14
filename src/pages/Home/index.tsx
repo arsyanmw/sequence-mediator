@@ -2,27 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { onValue, ref } from 'firebase/database';
 import { db } from '../../firebase/config';
-
-export interface Players {
-    id: number,
-    name: string,
-    isViolation: boolean,
-    time: number,
-    color: string,
-    totalTurn: number,
-    onTurn: boolean,
-}
-
-export interface Matches {
-    mediatorName: string,
-    name: string,
-    status: number,
-    isPaused: boolean,
-    totalTurnMatch: number,
-    elapsedTime: number,
-    lastPlayerRun: number,
-    players: Players[]
-}
+import {FaCrown} from "@react-icons/all-files/fa/FaCrown";
+import {Matches, Players} from "../../interfaces";
 
 const HomePage = () => {
     const [matches, setMatches] = useState<Matches[]>([]);

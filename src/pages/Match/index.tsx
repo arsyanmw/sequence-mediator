@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {onValue, ref, update} from "firebase/database";
 import {db} from "../../firebase/config";
-import {Matches, Players} from "../Home";
+import {Matches, Players} from "../../interfaces";
 
 const MatchPage = () => {
     const [match, setMatch] = useState<Matches>();
