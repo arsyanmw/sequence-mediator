@@ -12,11 +12,21 @@ export interface Players {
 export interface Matches {
     mediatorName: string,
     name: string,
-    status: number,
     isPaused: boolean,
     totalTurnMatch: number,
     elapsedTime: number,
     lastPlayerRun: number,
     winner: number,
+    status: Statuses,
     players: Players[]
+}
+
+export interface Colors {
+    name: string,
+    hex: string;
+}
+
+export enum Statuses {
+    finished,
+    ongoing,
 }
