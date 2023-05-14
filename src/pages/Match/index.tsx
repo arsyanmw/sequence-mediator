@@ -28,7 +28,7 @@ const MatchPage = () => {
                 setShowModalCardCheck(shouldShowModal);
             }
         })
-    }, [matchId])
+    }, [history, matchId])
 
     useEffect(() => {
         get(child(ref(db), 'colors/'))
