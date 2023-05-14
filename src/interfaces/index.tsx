@@ -6,7 +6,6 @@ export interface Players {
     color: string,
     totalTurn: number,
     onTurn: boolean,
-    isWinner: boolean,
 }
 
 export interface Matches {
