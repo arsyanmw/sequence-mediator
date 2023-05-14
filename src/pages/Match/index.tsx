@@ -21,7 +21,7 @@ const MatchPage = () => {
                 const matchData: Matches = snapshot.val()[matchId]
                 setMatch(matchData);
 
-                const shouldShowModal = matchData.status === Statuses.ongoing && matchData.totalTurnMatch % 10 === 0;
+                const shouldShowModal = matchData.status === Statuses.ongoing && matchData.totalTurnMatch !== 0 && matchData.totalTurnMatch % 10 === 0;
                 setShowModalCardCheck(shouldShowModal);
             }
         })
@@ -87,6 +87,12 @@ const MatchPage = () => {
         return colors.find(color => color.name === playerColor);
     }
 
+    const totalTurn = () => {
+        return match?.totalTurnMatch || match?.players?.reduce((acc, currentValue) => {
+            return acc + currentValue.totalTurn;
+        }, 0);
+    }
+
     return (
         <div className='container mx-auto p-4'>
             <div className='wrapper w-100 h-fit'>
@@ -101,13 +107,17 @@ const MatchPage = () => {
                     <div className="pause-button flex justify-center">
                         <button className={`rounded-full w-20 h-20 shadow-md flex justify-center items-center text-lg font-semibold ${match?.status === 0 && ' bg-slate-200 text-slate-500'}`} onClick={setPaused} disabled={match?.status === 0}>{match?.isPaused ? 'Play' : 'Paused'}</button>
                     </div>
+                    <div className="total-turn flex justify-center mt-5">
+                        <p className='font-bold'>Total Turn : {totalTurn()}</p>
+                    </div>
                     <div className="player-control flex justify-between mt-5">
                         {match?.players && match.players.map((player: Players, idx: number) => {
                             return (
                                 <div
                                     className='w-100 h-100 flex flex-col justify-center items-center shadow-md p-4 rounded-lg'
                                     key={idx} style={{backgroundColor: `${setPlayerColor(player.color)?.hex}`}}>
-                                    <p className='mb-5 text-lg font-semibold rounded-full bg-white px-2'>{player.name}</p>
+                                    <p className='text-lg font-semibold rounded-full bg-white px-2'>{player.name}</p>
+                                    <p className='mb-5 text-lg text-white font-semibold'>{player.totalTurn}</p>
                                     <button
                                         className={(!player.isViolation && match.status !== 0) ? 'text-white rounded-lg p-3 bg-rose-500 bg-orange-600 hover:bg-orange-400' : 'text-white rounded-lg p-3 bg-rose-200'}
                                         disabled={player.isViolation && match.status !== 0}
