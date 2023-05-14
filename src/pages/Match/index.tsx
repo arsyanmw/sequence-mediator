@@ -119,7 +119,7 @@ const MatchPage = () => {
                         {match?.players && match.players.map((player: Players, idx: number) => {
                             return (
                                 <div
-                                    className='w-100 h-100 flex flex-col justify-center items-center shadow-md p-4 rounded-lg'
+                                    className='w-5/12 md:w-2/12 h-100 flex flex-col justify-center items-center shadow-md p-4 rounded-lg'
                                     key={idx} style={{backgroundColor: `${setPlayerColor(player.color)?.hex}`}}>
                                     <p className='text-lg font-semibold rounded-full bg-white px-2'>{player.name}</p>
                                     <p className='mb-5 text-lg text-white font-semibold'>{player.totalTurn}</p>
