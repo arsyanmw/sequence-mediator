@@ -20,9 +20,9 @@ const MatchPage = () => {
             if (snapshot.exists()) {
                 const matchData: Matches = snapshot.val()[matchId]
                 setMatch(matchData);
-                if (matchData.status === Statuses.ongoing && matchData.totalTurnMatch / 10 === 1) {
-                    setShowModalCardCheck(!showModalCardCheck);
-                }
+
+                const shouldShowModal = matchData.status === Statuses.ongoing && matchData.totalTurnMatch % 10 === 0;
+                setShowModalCardCheck(shouldShowModal);
             }
         })
     }, [matchId])
