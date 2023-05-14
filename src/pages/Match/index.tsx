@@ -97,7 +97,9 @@ const MatchPage = () => {
         <div className='container mx-auto p-4'>
             <div className='wrapper w-100 h-fit'>
                 <div className='title flex justify-center'>{match?.players.length === 2 && (<p className='text-3xl font-bold'>{match.players[0].name} VS {match.players[1].name}</p>)}</div>
-                <div className='mediator flex justify-center mt-1'><span>Mediator</span> <span className='rounded-full px-2 ms-2 bg-amber-500'>{match?.mediatorName}</span></div>
+                {match?.mediatorName && (
+                    <div className='mediator flex justify-center mt-1'><span>Mediator</span> <span className='rounded-full px-2 ms-2 bg-amber-500'>{match?.mediatorName}</span></div>
+                )}
                 <div className='match-round flex justify-center mt-1 font-bold'>Match - {parseInt(matchId) + 1}</div>
                 <div className="status flex justify-center mt-1">
                     {match?.status === 1 && (<span className='rounded-full px-2 ms-2 bg-lime-400 font-bold text-white'>On Going</span>)}
