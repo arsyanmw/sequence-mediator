@@ -10,20 +10,30 @@ export interface Players {
 
 export interface Matches {
     mediatorName: string,
-    createdAt: Date,
     name: string,
     isPaused: boolean,
     totalTurnMatch: number,
     elapsedTime: number,
     lastPlayerRun: number,
-    winner: number,
+    winner: number | string,
     status: Statuses,
-    players: Players[]
+    players: Players[],
+    createdAt: Date,
+    endAt: Date,
+
 }
 
 export interface Colors {
     name: string,
     hex: string;
+}
+
+export interface Histories {
+    name: string,
+    matches?: Matches[],
+    status: number,
+    createdAt: Date,
+    endAt: Date,
 }
 
 export enum Statuses {

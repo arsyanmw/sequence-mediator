@@ -19,13 +19,11 @@ const MatchPage = () => {
         onValue(ref(db, 'matches/'), snapshot => {
             if (snapshot.exists()) {
                 const matchData: Matches = snapshot.val()[matchId]
-                if (!matchData) {
-                    history.push('/');
-                }
                 setMatch(matchData);
 
-                const shouldShowModal = matchData?.status === Statuses.ongoing && matchData.totalTurnMatch !== 0 && matchData.totalTurnMatch % 10 === 0;
-                setShowModalCardCheck(shouldShowModal);
+                if (matchData?.status === 0 && matchData?.winner === '') {
+                    setShowModalFinished(prev => !prev);
+                }
             }
         })
     }, [history, matchId])
@@ -34,6 +32,15 @@ const MatchPage = () => {
         get(child(ref(db), 'colors/'))
             .then(colors => setColors(colors.val()));
     }, [])
+
+    useEffect(() => {
+        const totalTurn = match?.players?.reduce((acc, currentValue) => {
+            return acc + currentValue.totalTurn;
+        }, 0) || 0;
+
+        const shouldShowModal = match?.status === Statuses.ongoing && totalTurn !== 0 && totalTurn % 10 === 0;
+        setShowModalCardCheck(shouldShowModal);
+    }, [match])
 
     const setPaused = () => {
         let currData = match;
@@ -73,7 +80,7 @@ const MatchPage = () => {
 
     const setFinished = (winnerId: number) => {
         let currData = match;
-        if (currData?.status === 1) {
+        if (currData) {
             currData.winner = winnerId;
             currData.isPaused = true;
             currData.status = 0;
