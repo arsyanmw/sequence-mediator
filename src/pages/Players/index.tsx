@@ -53,8 +53,8 @@ const PLayersPage = () => {
                         <div className="wrapper w-full p-4 rounded-lg shadow-md bg-white flex justify-between items-center mb-2" key={idx}>
                             <span className="text-center text-lg font-bold capitalize">{player?.name}</span>
                             <div className="player-option flex justify-center flex-row">
-                                <span className="text-center text-lg font-bold shadow-md rounded-full p-2" onClick={() => setModal({type: 'edit', show: true, playerName: player?.name})}><FaPen/></span>
-                                <span className="text-center text-lg text-white font-bold shadow-md rounded-full p-2 bg-red-500 ms-2" onClick={() => onDelete(idx)}><FaTrash/></span>
+                                <span className="text-center text-lg font-bold shadow-md rounded-full p-2 cursor-pointer" onClick={() => setModal({type: 'edit', show: true, playerName: player?.name})}><FaPen/></span>
+                                <span className="text-center text-lg text-white font-bold shadow-md rounded-full p-2 bg-red-500 ms-2 cursor-pointer" onClick={() => onDelete(idx)}><FaTrash/></span>
                             </div>
                         </div>
                     ))}
@@ -70,7 +70,7 @@ const PLayersPage = () => {
 
 const AddPlayerFAB = (props: { onPress: any }) => {
     return (
-        <div className="fab fixed bottom-4 right-3" onClick={props.onPress}>
+        <div className="fab fixed bottom-4 right-3 cursor-pointer" onClick={props.onPress}>
             <div className="fab-button rounded-full shadow-xl flex justify-center items-center bg-blue-500 active:bg-blue-300 p-5">
                 <FaPlus className="text-white text-lg" />
             </div>
