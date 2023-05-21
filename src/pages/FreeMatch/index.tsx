@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {onValue, ref, remove} from "firebase/database";
 import {Link} from "react-router-dom";
 import {FaTrash} from "@react-icons/all-files/fa/FaTrash";
 import {Matches} from "../../interfaces";
-import {db} from "../../firebase/config";
-
 import {TitlePage, WinTag} from "../../components";
+import {GiWhirlwind} from "@react-icons/all-files/gi/GiWhirlwind";
+
+import {db} from "../../firebase/config";
 
 const FreeMatchPage = () => {
     const [matches, setMatches] = useState<Matches[]>([]);
+    const elScrollDown = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const reference = ref(db, 'matches/');
@@ -19,6 +21,12 @@ const FreeMatchPage = () => {
             }
         })
     }, []);
+
+    useEffect(() => {
+        if (!matches.length) {
+            elScrollDown?.current?.scrollIntoView({behavior: 'smooth'})
+        }
+    }, [matches])
 
     const onDelete = (matchId: number) => {
         remove(ref(db, 'matches/' + matchId))
@@ -41,7 +49,10 @@ const FreeMatchPage = () => {
                     </div>
                 )
             ) : (
-                <div className="h-full w-full flex justify-center items-center">No Matches Found</div>
+                <div className="empty-data h-screen w-full flex justify-center items-center flex-col text-slate-400 font-bold" ref={elScrollDown}>
+                    <div className="icon text-3xl"><GiWhirlwind className="animate-pulse" /></div>
+                    <div className="text text-xl">No Free Matches Found.</div>
+                </div>
             )}
         </div>
     )

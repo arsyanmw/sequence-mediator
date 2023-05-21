@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {onValue, ref, remove, set, update} from "firebase/database";
 import {Link} from "react-router-dom";
 import {FaTrash} from "@react-icons/all-files/fa/FaTrash";
@@ -8,6 +8,7 @@ import {TitlePage, WinTag} from "../../components";
 import {FaPlus} from "@react-icons/all-files/fa/FaPlus";
 import {FaRegTimesCircle} from "@react-icons/all-files/fa/FaRegTimesCircle";
 import {tournamentStatuses} from "../../helpers";
+import {Gi3DMeeple} from "@react-icons/all-files/gi/Gi3DMeeple";
 import moment from "moment";
 import './index.css';
 
@@ -16,6 +17,8 @@ import {db} from "../../firebase/config";
 const TournamentPage = () => {
     const [tournaments, setTournaments] = useState<Tournament[]>([]);
     const [modal, setModal] = useState({type: 'add', show: false, buttonDisabled: false, data: null});
+    const elScrollDown = useRef<HTMLDivElement>(null);
+    const elScrollUp = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const reference = ref(db, 'matches/tournament/');
@@ -26,6 +29,14 @@ const TournamentPage = () => {
             }
         })
     }, []);
+
+    useEffect(() => {
+        if (!tournaments.length) {
+            elScrollDown?.current?.scrollIntoView({behavior: 'smooth'})
+        } else {
+            elScrollUp?.current?.scrollIntoView({behavior: 'smooth'})
+        }
+    }, [tournaments])
 
     const onDeleteMatch = (tournamentIdx: number, matchIdx: number) => {
         remove(ref(db, `matches/tournament/${tournamentIdx}/matches/${matchIdx}`));
@@ -69,49 +80,56 @@ const TournamentPage = () => {
     }
 
     return (
-        <div className='container mx-auto list pb-20'>
+        <div className='container mx-auto list pb-20' ref={elScrollUp}>
             <TitlePage title={"Tournament's"} />
 
-            <Accordion>
-                {tournaments && tournaments.map((tournament: Tournament, tournamentIdx: number) => {
-                    return (
-                        <AccordionItem key={tournamentIdx} header={
-                            <div className='accord-header p-2 text-black font-bold w-full border-b-2'>
-                                {tournament.name}
-                            </div>
-                        } className='border-2 mb-2 w-full rounded-lg' initialEntered={tournaments.length - 1 === tournamentIdx}>
-                            <div className="tournament-desc w-full flex justify-between items-center p-2 mb-3">
-                                <span className="statuses font-bold"><span className={"rounded-full px-2 ms-2 text-white" + (tournament.status === Statuses.ongoing ? " bg-lime-400" : " bg-slate-400")}>{tournamentStatuses(tournament.status)}</span></span>
-                                <span className="date font-bold text-right max-w-[40%]">{moment(tournament.createdAt, 'DD/MM/YYYY HH:mm:ss').format('LLLL')}</span>
-                            </div>
-                            {tournament.status === Statuses.notstarted && (
-                                <div className="tournament-options w-full flex justify-center items-center p-2 mb-3">
-                                    <button className="p-2 rounded-full shadow-lg bg-blue-400 text-white font-bold" onClick={() => onChangeStatusTournament(tournamentIdx, tournament, Statuses.ongoing)}>Start Tournament</button>
-                                    <button className="ms-2 p-2 rounded-full shadow-lg bg-red-400 text-white font-bold" onClick={() => onDeleteTournament(tournamentIdx)}>Delete Tournament</button>
+            {tournaments.length ? (
+                <Accordion>
+                    {tournaments.map((tournament: Tournament, tournamentIdx: number) => {
+                        return (
+                            <AccordionItem key={tournamentIdx} header={
+                                <div className='accord-header p-2 text-black font-bold w-full border-b-2'>
+                                    {tournament.name}
                                 </div>
-                            )}
-                            {tournament.status === Statuses.ongoing && (
-                                <div className="tournament-options w-full flex justify-center items-center p-2 mb-3">
-                                    <button className="p-2 rounded-full shadow-lg bg-orange-400 text-white font-bold" onClick={() => onChangeStatusTournament(tournamentIdx, tournament, Statuses.finished)}>End Tournament</button>
+                            } className='border-2 mb-2 w-full rounded-lg' initialEntered={tournaments.length - 1 === tournamentIdx}>
+                                <div className="tournament-desc w-full flex justify-between items-center p-2 mb-3">
+                                    <span className="statuses font-bold"><span className={"rounded-full px-2 ms-2 text-white" + (tournament.status === Statuses.ongoing ? " bg-lime-400" : " bg-slate-400")}>{tournamentStatuses(tournament.status)}</span></span>
+                                    <span className="date font-bold text-right max-w-[40%]">{moment(tournament.createdAt, 'DD/MM/YYYY HH:mm:ss').format('LLLL')}</span>
                                 </div>
-                            )}
-                            {tournament.matches && tournament.matches.map((match: Matches, matchIdx: number) => {
-                                return (
-                                    <div className='flex justify-between items-center mb-5 px-2' key={matchIdx}>
-                                        <Link to={`/match/tournament/${matchIdx}/${tournamentIdx}`} key={matchIdx} className='w-full'>
-                                            <div className='card-list p-3 w-100 flex justify-between items-center flex-row rounded-lg shadow-md'>
-                                                <p className='flex flex-col md:flex-row items-center'>Match-{matchIdx + 1} <span className={'md:ms-1 px-2 rounded-full text-xs ' + (match?.status === 1 ? 'bg-lime-400' : 'bg-slate-400')}>{ match?.status === 1 ? 'On Going' : 'Finished' }</span></p>
-                                                <div className='flex justify-center items-center'>{WinTag(match.players, match.winner)}</div>
-                                            </div>
-                                        </Link>
-                                        <span className='ms-2 hover:cursor-pointer rounded-full shadow-lg p-2 bg-red-500' onClick={() => onDeleteMatch(tournamentIdx, matchIdx)}><FaTrash className='text-white text-lg' /></span>
+                                {tournament.status === Statuses.notstarted && (
+                                    <div className="tournament-options w-full flex justify-center items-center p-2 mb-3">
+                                        <button className="p-2 rounded-full shadow-lg bg-blue-400 text-white font-bold" onClick={() => onChangeStatusTournament(tournamentIdx, tournament, Statuses.ongoing)}>Start Tournament</button>
+                                        <button className="ms-2 p-2 rounded-full shadow-lg bg-red-400 text-white font-bold" onClick={() => onDeleteTournament(tournamentIdx)}>Delete Tournament</button>
                                     </div>
-                                )
-                            })}
-                        </AccordionItem>
-                    )
-                })}
-            </Accordion>
+                                )}
+                                {tournament.status === Statuses.ongoing && (
+                                    <div className="tournament-options w-full flex justify-center items-center p-2 mb-3">
+                                        <button className="p-2 rounded-full shadow-lg bg-orange-400 text-white font-bold" onClick={() => onChangeStatusTournament(tournamentIdx, tournament, Statuses.finished)}>End Tournament</button>
+                                    </div>
+                                )}
+                                {tournament.matches && tournament.matches.map((match: Matches, matchIdx: number) => {
+                                    return (
+                                        <div className='flex justify-between items-center mb-5 px-2' key={matchIdx}>
+                                            <Link to={`/match/tournament/${matchIdx}/${tournamentIdx}`} key={matchIdx} className='w-full'>
+                                                <div className='card-list p-3 w-100 flex justify-between items-center flex-row rounded-lg shadow-md'>
+                                                    <p className='flex flex-col md:flex-row items-center'>Match-{matchIdx + 1} <span className={'md:ms-1 px-2 rounded-full text-xs ' + (match?.status === 1 ? 'bg-lime-400' : 'bg-slate-400')}>{ match?.status === 1 ? 'On Going' : 'Finished' }</span></p>
+                                                    <div className='flex justify-center items-center'>{WinTag(match.players, match.winner)}</div>
+                                                </div>
+                                            </Link>
+                                            <span className='ms-2 hover:cursor-pointer rounded-full shadow-lg p-2 bg-red-500' onClick={() => onDeleteMatch(tournamentIdx, matchIdx)}><FaTrash className='text-white text-lg' /></span>
+                                        </div>
+                                    )
+                                })}
+                            </AccordionItem>
+                        )
+                    })}
+                </Accordion>
+            ) : (
+                <div className="empty-data h-screen w-full flex justify-center items-center flex-col text-slate-400 font-bold" ref={elScrollDown}>
+                    <div className="icon text-3xl"><Gi3DMeeple className="animate-pulse" /></div>
+                    <div className="text text-xl">No Tournament's Found.</div>
+                </div>
+            )}
 
             <AddTournamentFAB onPress={() => setModal({type: 'add', show: true, buttonDisabled: false, data: null})} />
             {modal.show && <ModalAddPlayer onSubmit={onCreateTournament} onClose={() => setModal({...modal, show: false})} modalData={modal} />}

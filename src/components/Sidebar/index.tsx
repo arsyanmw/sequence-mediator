@@ -28,7 +28,7 @@ export const Sidebar = () => {
                                 <li key={idx}>
                                     <Link to={route.path}>
                                         <div className={'nav-list w-full shadow-md rounded-lg p-4 flex items-center mb-2' + (isExactPath(route.path) ? ' bg-gradient-to-r from-cyan-500 to-blue-500 text-white ms-1' : ' text-black')}>
-                                            {route.icon} <span className={"font-bold ms-2"}>{route.title}</span>
+                                            <span className={route.title === 'Tournament' && pathname === route.path ? "animate-pulse" : ""}>{route.icon}</span> <span className={"font-bold ms-2"}>{route.title}</span>
                                         </div>
                                     </Link>
                                 </li>
@@ -50,7 +50,7 @@ export const Sidebar = () => {
                                     <li key={idx}>
                                         <Link to={route.path} onClick={() => setIsShow(false)}>
                                             <div className={"nav-list w-full shadow-md rounded-lg p-4 flex justify-center items-center mb-2" + (isExactPath(route.path) ? " bg-gradient-to-r from-cyan-500 to-blue-500 text-white" : " text-black")}>
-                                                {route.icon}
+                                                <span className={route.title === 'Tournament' && pathname === route.path ? "animate-pulse" : ""}>{route.icon}</span>
                                             </div>
                                         </Link>
                                     </li>

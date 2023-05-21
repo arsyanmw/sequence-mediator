@@ -1,16 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {TitlePage} from "../../components";
 import {FaPlus} from "@react-icons/all-files/fa/FaPlus";
 import {FaPen} from "@react-icons/all-files/fa/FaPen";
 import {Challenger} from "../../interfaces";
 import {onValue, ref, remove, set} from "firebase/database";
-import {db} from "../../firebase/config";
 import {FaTrash} from "@react-icons/all-files/fa/FaTrash";
 import {FaRegTimesCircle} from "@react-icons/all-files/fa/FaRegTimesCircle";
+import {FaTired} from "@react-icons/all-files/fa/FaTired";
+
+import {db} from "../../firebase/config";
 
 const PLayersPage = () => {
     const [players, setPlayers] = useState<Challenger[]>([]);
     const [modal, setModal] = useState({type: 'add', show: false, buttonDisabled: false, playerName: ''});
+    const elScrollDown = useRef<HTMLDivElement>(null);
+    const elScrollUp = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         onValue(ref(db, 'players/'), snapshot => {
@@ -19,6 +23,14 @@ const PLayersPage = () => {
             }
         })
     }, [])
+
+    useEffect(() => {
+        if (!players.length) {
+            elScrollDown?.current?.scrollIntoView({behavior: 'smooth'})
+        } else {
+            elScrollUp?.current?.scrollIntoView({behavior: 'smooth'})
+        }
+    }, [players])
 
     const onAddPlayer = (newPlayerName: string, oldPlayerName?: string) => {
         setModal({...modal, buttonDisabled: true});
@@ -45,12 +57,12 @@ const PLayersPage = () => {
     }
 
     return (
-        <div className="wrapper">
-            <div className='container mx-auto pb-20'>
-                <TitlePage title={'Player List'} />
+        <div className='container mx-auto' ref={elScrollUp}>
+            <TitlePage title={'Player List'} />
 
+            {players.length ? (
                 <div className="player-list">
-                    {players.length && players.map((player, idx) => (
+                    {players.map((player, idx) => (
                         <div className="wrapper w-full p-4 rounded-lg shadow-md bg-white flex justify-between items-center mb-2" key={idx}>
                             <span className="text-center text-lg font-bold capitalize">{player?.name}</span>
                             <div className="player-option flex justify-center flex-row">
@@ -60,10 +72,14 @@ const PLayersPage = () => {
                         </div>
                     ))}
                 </div>
+            ) : (
+                <div className="empty-data h-screen w-full flex justify-center items-center flex-col text-slate-400 font-bold" ref={elScrollDown}>
+                    <div className="icon text-3xl"><FaTired className="animate-bounce" /></div>
+                    <div className="text text-xl">No Players Found.</div>
+                </div>
+            )}
 
-                <AddPlayerFAB onPress={() => setModal({type: 'add', show: true, buttonDisabled: false, playerName: ''})} />
-            </div>
-
+            <AddPlayerFAB onPress={() => setModal({type: 'add', show: true, buttonDisabled: false, playerName: ''})} />
             {modal.show && <ModalAddPlayer onSubmit={onAddPlayer} onClose={() => setModal({...modal, show: false})} modalData={modal} />}
         </div>
     )
