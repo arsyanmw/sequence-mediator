@@ -2,15 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {TitlePage} from "../../components";
 import {FaPlus} from "@react-icons/all-files/fa/FaPlus";
 import {FaPen} from "@react-icons/all-files/fa/FaPen";
-import {Challanger} from "../../interfaces";
+import {Challenger} from "../../interfaces";
 import {onValue, ref, remove, set} from "firebase/database";
 import {db} from "../../firebase/config";
 import {FaTrash} from "@react-icons/all-files/fa/FaTrash";
 import {FaRegTimesCircle} from "@react-icons/all-files/fa/FaRegTimesCircle";
 
 const PLayersPage = () => {
-    const [players, setPlayers] = useState<Challanger[]>([]);
-    const [modal, setModal] = useState({type: 'add', show: false, playerName: ''});
+    const [players, setPlayers] = useState<Challenger[]>([]);
+    const [modal, setModal] = useState({type: 'add', show: false, buttonDisabled: false, playerName: ''});
 
     useEffect(() => {
         onValue(ref(db, 'players/'), snapshot => {
@@ -21,6 +21,7 @@ const PLayersPage = () => {
     }, [])
 
     const onAddPlayer = (newPlayerName: string, oldPlayerName?: string) => {
+        setModal({...modal, buttonDisabled: true});
         let currPlayers: any[] = players;
 
         if (oldPlayerName) {
@@ -35,7 +36,7 @@ const PLayersPage = () => {
         }
 
         if (newPlayerName) {
-            set(ref(db, 'players/'), currPlayers).then(() => setModal({...modal, show: false}));
+            set(ref(db, 'players/'), currPlayers).then(() => setModal({...modal, show: false, buttonDisabled: false}));
         }
     }
 
@@ -53,14 +54,14 @@ const PLayersPage = () => {
                         <div className="wrapper w-full p-4 rounded-lg shadow-md bg-white flex justify-between items-center mb-2" key={idx}>
                             <span className="text-center text-lg font-bold capitalize">{player?.name}</span>
                             <div className="player-option flex justify-center flex-row">
-                                <span className="text-center text-lg font-bold shadow-md rounded-full p-2 cursor-pointer" onClick={() => setModal({type: 'edit', show: true, playerName: player?.name})}><FaPen/></span>
+                                <span className="text-center text-lg font-bold shadow-md rounded-full p-2 cursor-pointer" onClick={() => setModal({type: 'edit', show: true, buttonDisabled: false, playerName: player?.name})}><FaPen/></span>
                                 <span className="text-center text-lg text-white font-bold shadow-md rounded-full p-2 bg-red-500 ms-2 cursor-pointer" onClick={() => onDelete(idx)}><FaTrash/></span>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <AddPlayerFAB onPress={() => setModal({type: 'add', show: true, playerName: ''})} />
+                <AddPlayerFAB onPress={() => setModal({type: 'add', show: true, buttonDisabled: false, playerName: ''})} />
             </div>
 
             {modal.show && <ModalAddPlayer onSubmit={onAddPlayer} onClose={() => setModal({...modal, show: false})} modalData={modal} />}
@@ -99,21 +100,21 @@ const ModalAddPlayer = (props: { onSubmit: any, onClose: any, modalData: any }) 
                     <FaRegTimesCircle className="text-2xl" />
                 </div>
 
-                <div className="title font-bold text-lg mb-2">
+                <div className="title font-bold text-lg text-center mb-2">
                     <span className="capitalize">{props.modalData.type} Player</span>
                 </div>
                 <div className="text-input w-full mb-2 flex justify-center items-center">
                     <input type="text" placeholder="Janu Doe" className="w-4/6 p-2 font-semibold border-b-2 outline-0 text-center" value={playerName} onChange={(e) => setPlayerName(e.target.value)} />
                 </div>
                 <div className="button w-full flex justify-center items-center">
-                    <button className="bg-blue-500 active:bg-blue-300 p-2 rounded-lg w-4/6">
-                        <span className="text-white font-bold" onClick={() => {
-                            if (playerName) {
-                                props.onSubmit(playerName, oldPlayerName);
-                            } else {
-                                alert('Input Player Name First!')
-                            }
-                        }}>Submit</span>
+                    <button className={"active:bg-blue-300 p-2 rounded-lg w-4/6 cursor-pointer" + (props.modalData.buttonDisabled ? " bg-blue-300" : " bg-blue-500")} onClick={() => {
+                        if (playerName) {
+                            props.onSubmit(playerName, oldPlayerName);
+                        } else {
+                            alert('Input Player Name First!')
+                        }
+                    }} disabled={props.modalData.buttonDisabled}>
+                        <span className="text-white font-bold">Submit</span>
                     </button>
                 </div>
             </div>

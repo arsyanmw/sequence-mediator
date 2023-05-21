@@ -12,8 +12,6 @@ export interface Matches {
     mediatorName: string,
     name: string,
     isPaused: boolean,
-    totalTurnMatch: number,
-    elapsedTime: number,
     lastPlayerRun: number,
     winner: number | string,
     status: Statuses,
@@ -31,9 +29,10 @@ export interface Colors {
 export interface Tournament {
     name: string,
     matches?: Matches[],
-    status: number,
-    createdAt: Date,
-    endAt: Date,
+    status: Statuses,
+    startAt: Date | string,
+    endAt: Date | string,
+    createdAt: Date | string,
 }
 
 export interface Routes {
@@ -46,10 +45,11 @@ export interface Routes {
     children: any | null
 }
 
-export interface Challanger {
+export interface Challenger {
     name: string
 }
 export enum Statuses {
     finished,
     ongoing,
+    notstarted
 }

@@ -8,7 +8,15 @@ import logo from '../../assets/images/logo.png';
 
 export const Sidebar = () => {
     const { pathname } = useLocation();
-    const [isShow, setIsShow] = useState(true);
+    const [isShow, setIsShow] = useState(false);
+    
+    const isExactPath = (path: string) => {
+        if (path === '/') {
+            return pathname === path;
+        }
+
+        return pathname.includes(path)
+    };
 
     return (
         <div className={"wrapper h-full w-1/6 fixed z-50"}>
@@ -19,7 +27,7 @@ export const Sidebar = () => {
                             return route.show && (
                                 <li key={idx}>
                                     <Link to={route.path}>
-                                        <div className={'nav-list w-full shadow-md rounded-lg p-4 flex items-center mb-2' + (pathname === route.path ? ' bg-blue-400 text-white ms-1' : ' text-black')}>
+                                        <div className={'nav-list w-full shadow-md rounded-lg p-4 flex items-center mb-2' + (isExactPath(route.path) ? ' bg-blue-400 text-white ms-1' : ' text-black')}>
                                             {route.icon} <span className={"font-bold ms-2"}>{route.title}</span>
                                         </div>
                                     </Link>
@@ -40,8 +48,8 @@ export const Sidebar = () => {
                             {routes.map((route: Routes, idx) => {
                                 return route.show && (
                                     <li key={idx}>
-                                        <Link to={route.path}>
-                                            <div className={"nav-list w-full shadow-md rounded-lg p-4 flex justify-center items-center mb-2" + (pathname === route.path ? " bg-blue-400 text-white" : " text-black")}>
+                                        <Link to={route.path} onClick={() => setIsShow(false)}>
+                                            <div className={"nav-list w-full shadow-md rounded-lg p-4 flex justify-center items-center mb-2" + (isExactPath(route.path) ? " bg-blue-400 text-white" : " text-black")}>
                                                 {route.icon}
                                             </div>
                                         </Link>

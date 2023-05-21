@@ -9,7 +9,7 @@ export const AppLayout = () => {
     return (
         <div className='app-wrapper h-screen w-screen flex'>
             <Sidebar />
-            <div className='pages w-full relative p-3'>
+            <div className='pages w-full relative p-3 overflow-auto'>
                 <Switch>
                     {routes.map((route: Routes, idx) => (
                         <Route exact={route.exact} path={route.path} key={idx}>

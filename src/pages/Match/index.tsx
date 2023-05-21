@@ -105,9 +105,9 @@ const MatchPage = () => {
     }
 
     const totalTurn = () => {
-        return match?.totalTurnMatch || match?.players?.reduce((acc, currentValue) => {
+        return match?.players?.reduce((acc, currentValue) => {
             return acc + currentValue.totalTurn;
-        }, 0);
+        }, 0) || 0;
     }
 
     return (
@@ -147,7 +147,7 @@ const MatchPage = () => {
                         })}
                     </div>
                 </div>
-                {match?.createdAt && match.endAt && (
+                {match?.createdAt && match?.endAt && (
                     <div className="elapsed-time">
                         <span>Elapsed Time : {moment(match.endAt, 'DD/MM/YYYY HH:mm:ss').diff(moment(match.createdAt, 'DD/MM/YYYY HH:mm:ss'), 'minute')}</span>
                     </div>
