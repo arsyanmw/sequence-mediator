@@ -17,7 +17,7 @@ const MatchPage = () => {
     let { matchId, matchType, matchTypeId } = useParams<{matchId: string, matchType: string, matchTypeId: string}>();
 
     useEffect(() => {
-        let url = `matches/free-play/${matchId}/`;
+        let url = `matches/free-match/${matchId}/`;
         
         if (matchType === 'tournament') {
             url = `matches/tournament/${matchTypeId}/matches/${matchId}/`

@@ -94,8 +94,8 @@ const ModalAddPlayer = (props: { onSubmit: any, onClose: any, modalData: any }) 
 
     return (
         <div className="wrapper fixed top-0 right-0 left-0 bottom-0 h-screen w-screen md:w-full bg-slate-500/[.9] z-50 flex justify-center items-center">
-            <div className="modal bg-white w-4/6 h-60 rounded-lg shadow-lg flex justify-between items-center flex-col p-5 relative">
-                <div className="close-button absolute top-2 right-2" onClick={props.onClose}>
+            <div className="modal bg-white w-4/6 md:w-1/6 h-60 rounded-lg shadow-lg flex justify-between items-center flex-col p-5 relative">
+                <div className="close-button absolute top-2 right-2 cursor-pointer" onClick={props.onClose}>
                     <FaRegTimesCircle className="text-2xl" />
                 </div>
 

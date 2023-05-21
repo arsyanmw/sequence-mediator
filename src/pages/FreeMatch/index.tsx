@@ -7,7 +7,7 @@ import {db} from "../../firebase/config";
 
 import {TitlePage, WinTag} from "../../components";
 
-const FreePlayPage = () => {
+const FreeMatchPage = () => {
     const [matches, setMatches] = useState<Matches[]>([]);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const FreePlayPage = () => {
 
     return (
         <div className='container mx-auto list'>
-            <TitlePage title={"Free Play's"} />
+            <TitlePage title={"Free Matches"} />
 
             {matches.length ? matches.map((match: Matches, idx: number) => (
                     <div className='flex justify-between items-center mb-5' key={idx}>
@@ -47,4 +47,4 @@ const FreePlayPage = () => {
     )
 }
 
-export default FreePlayPage;
+export default FreeMatchPage;

@@ -19,8 +19,8 @@ export const Sidebar = () => {
                             return route.show && (
                                 <li key={idx}>
                                     <Link to={route.path}>
-                                        <div className={'nav-list w-full shadow-md rounded-lg p-4 flex items-center mb-2' + (pathname === route.path ? ' bg-blue-400 text-white' : ' text-black')}>
-                                            {route.icon} <span className={"font-bold" + (pathname === route.path ? " ms-3" : ' ms-2')}>{route.title}</span>
+                                        <div className={'nav-list w-full shadow-md rounded-lg p-4 flex items-center mb-2' + (pathname === route.path ? ' bg-blue-400 text-white ms-1' : ' text-black')}>
+                                            {route.icon} <span className={"font-bold ms-2"}>{route.title}</span>
                                         </div>
                                     </Link>
                                 </li>

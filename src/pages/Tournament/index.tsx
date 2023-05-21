@@ -48,7 +48,7 @@ const TournamentPage = () => {
                                                 <div className='flex justify-center items-center'>{WinTag(match.players, match.winner)}</div>
                                             </div>
                                         </Link>
-                                        <span className='ms-2 hover:cursor-pointer rounded-lg shadow-lg p-2' onClick={() => onDelete(tournamentIdx, matchIdx)}><FaTrash className='text-rose-700' /></span>
+                                        <span className='ms-2 hover:cursor-pointer rounded-full shadow-lg p-2 bg-red-500' onClick={() => onDelete(tournamentIdx, matchIdx)}><FaTrash className='text-white text-lg' /></span>
                                     </div>
                                 )
                             })}

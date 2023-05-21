@@ -1,6 +1,6 @@
 import {FaHome} from "@react-icons/all-files/fa/FaHome";
 import {FaUsers} from "@react-icons/all-files/fa/FaUsers";
-import {FreePlayPage, HomePage, MatchPage, PLayersPage, TournamentPage} from "../pages";
+import {FreeMatchPage, HomePage, MatchPage, PLayersPage, TournamentPage} from "../pages";
 import {FaTrophy} from "@react-icons/all-files/fa/FaTrophy";
 import {FaTheaterMasks} from "@react-icons/all-files/fa/FaTheaterMasks";
 
@@ -15,10 +15,10 @@ export const routes = [
         children: null,
     },
     {
-        path: '/match/free-play',
+        path: '/match/free-match',
         exact: false,
         title: 'Free Match',
-        component: <FreePlayPage />,
+        component: <FreeMatchPage />,
         icon: <FaTheaterMasks />,
         show: true,
         children: null,
