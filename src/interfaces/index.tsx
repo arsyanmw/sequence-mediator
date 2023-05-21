@@ -28,7 +28,7 @@ export interface Colors {
     hex: string;
 }
 
-export interface Histories {
+export interface Tournament {
     name: string,
     matches?: Matches[],
     status: number,
@@ -36,6 +36,19 @@ export interface Histories {
     endAt: Date,
 }
 
+export interface Routes {
+    path: string,
+    title: string,
+    exact: boolean,
+    show: boolean,
+    component: any,
+    icon: any,
+    children: any | null
+}
+
+export interface Challanger {
+    name: string
+}
 export enum Statuses {
     finished,
     ongoing,

@@ -1,5 +1,5 @@
-import {TabOne} from "./Tabs/tabOne";
-import {TabTwo} from "./Tabs/tabTwo";
 import {WinTag} from "./WinTag";
+import {Sidebar} from "./Sidebar";
+import {TitlePage} from "./TitlePage";
 
-export { TabOne, TabTwo, WinTag };
+export { WinTag, Sidebar, TitlePage };

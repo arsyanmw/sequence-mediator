@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useParams, useHistory} from 'react-router-dom';
+import {useParams, useHistory} from 'react-router-dom';
 import './index.css';
 import {child, get, onValue, ref, update} from "firebase/database";
 import {FaFlag} from "@react-icons/all-files/fa/FaFlag";
 import {FaCrown} from "@react-icons/all-files/fa/FaCrown";
 import {db} from "../../firebase/config";
 import {Colors, Matches, Players, Statuses} from "../../interfaces";
+import moment from "moment";
 
 const MatchPage = () => {
     const history = useHistory();
@@ -13,12 +14,18 @@ const MatchPage = () => {
     const [colors, setColors] = useState<Colors[]>([]);
     const [showModalCardCheck, setShowModalCardCheck] = useState<boolean>(false);
     const [showModalFinished, setShowModalFinished] = useState<boolean>(false);
-    let { matchId } = useParams<{matchId: string}>();
+    let { matchId, matchType, matchTypeId } = useParams<{matchId: string, matchType: string, matchTypeId: string}>();
 
     useEffect(() => {
-        onValue(ref(db, 'matches/'), snapshot => {
+        let url = `matches/free-play/${matchId}/`;
+        
+        if (matchType === 'tournament') {
+            url = `matches/tournament/${matchTypeId}/matches/${matchId}/`
+        }
+
+        onValue(ref(db, url), snapshot => {
             if (snapshot.exists()) {
-                const matchData: Matches = snapshot.val()[matchId]
+                const matchData: Matches = snapshot.val()
                 setMatch(matchData);
 
                 if (matchData?.status === 0 && matchData?.winner === '') {
@@ -26,7 +33,7 @@ const MatchPage = () => {
                 }
             }
         })
-    }, [history, matchId])
+    }, [history, matchId, matchType, matchTypeId])
 
     useEffect(() => {
         get(child(ref(db), 'colors/'))
@@ -128,7 +135,7 @@ const MatchPage = () => {
                                 <div
                                     className='w-5/12 md:w-2/12 h-100 flex flex-col justify-center items-center shadow-md p-4 rounded-lg'
                                     key={idx} style={{backgroundColor: `${setPlayerColor(player.color)?.hex}`}}>
-                                    <p className='text-lg font-semibold rounded-full bg-white px-2'>{player.name}</p>
+                                    <p className={"text-lg font-semibold rounded-full px-2 flex justify-center items-center" + (match.winner === idx ? " bg-lime-400" : " bg-white")}>{match.winner === idx && <FaCrown className="me-1" />} {player.name}</p>
                                     <p className='mb-5 text-lg text-white font-semibold'>{player.totalTurn}</p>
                                     <button
                                         className={(!player.isViolation && match.status !== 0) ? 'text-white rounded-lg p-3 bg-orange-600 hover:bg-orange-400' : 'text-white rounded-lg p-3 bg-rose-200'}
@@ -140,11 +147,14 @@ const MatchPage = () => {
                         })}
                     </div>
                 </div>
+                {match?.createdAt && match.endAt && (
+                    <div className="elapsed-time">
+                        <span>Elapsed Time : {moment(match.endAt, 'DD/MM/YYYY HH:mm:ss').diff(moment(match.createdAt, 'DD/MM/YYYY HH:mm:ss'), 'minute')}</span>
+                    </div>
+                )}
                 <div className="buttons flex justify-center">
                     <div className="back flex justify-center mt-10">
-                        <Link to='/'>
-                            <button className='rounded-full p-3 shadow-md font-bold w-20'>Back</button>
-                        </Link>
+                        <button className='rounded-full p-3 shadow-md font-bold w-20' onClick={() => window.history.back()}>Back</button>
                     </div>
                     {match?.status === 1 && (
                         <div className="back flex justify-center mt-10 ms-2">
