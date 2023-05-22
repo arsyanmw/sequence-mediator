@@ -57,7 +57,7 @@ const PLayersPage = () => {
     }
 
     return (
-        <div className='container mx-auto' ref={elScrollUp}>
+        <div className='container mx-auto pb-20' ref={elScrollUp}>
             <TitlePage title={'Player List'} />
 
             {players.length ? (
