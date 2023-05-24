@@ -13,7 +13,7 @@ const FreeMatchPage = () => {
     const elScrollDown = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const reference = ref(db, 'matches/');
+        const reference = ref(db, 'matches/free-play/');
 
         onValue(reference, snapshot => {
             if (snapshot.exists()) {
@@ -29,7 +29,7 @@ const FreeMatchPage = () => {
     }, [matches])
 
     const onDelete = (matchId: number) => {
-        remove(ref(db, 'matches/' + matchId))
+        remove(ref(db, 'matches/free-play' + matchId))
             .then(() => window.location.reload());
     }
 
