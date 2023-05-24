@@ -33,7 +33,7 @@ export const routes = [
         children: null,
     },
     {
-        path: '/match/:matchType/:matchId/:matchTypeId',
+        path: '/match/:matchType/:matchId/:matchTypeId?',
         exact: false,
         title: 'Match',
         component: <MatchPage />,

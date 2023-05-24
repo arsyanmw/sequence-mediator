@@ -14,16 +14,15 @@ const MatchPage = () => {
     const [colors, setColors] = useState<Colors[]>([]);
     const [showModalCardCheck, setShowModalCardCheck] = useState<boolean>(false);
     const [showModalFinished, setShowModalFinished] = useState<boolean>(false);
+    const [url, setUrl] = useState('matches/free-play/');
     let { matchId, matchType, matchTypeId } = useParams<{matchId: string, matchType: string, matchTypeId: string}>();
 
     useEffect(() => {
-        let url = `matches/free-match/${matchId}/`;
-        
         if (matchType === 'tournament') {
-            url = `matches/tournament/${matchTypeId}/matches/${matchId}/`
+            setUrl(`matches/tournament/${matchTypeId}/matches/`);
         }
 
-        onValue(ref(db, url), snapshot => {
+        onValue(ref(db, url + '/' + matchId), snapshot => {
             if (snapshot.exists()) {
                 const matchData: Matches = snapshot.val()
                 setMatch(matchData);
@@ -33,7 +32,7 @@ const MatchPage = () => {
                 }
             }
         })
-    }, [history, matchId, matchType, matchTypeId])
+    }, [history, matchId, matchType, matchTypeId, url])
 
     useEffect(() => {
         get(child(ref(db), 'colors/'))
@@ -69,7 +68,7 @@ const MatchPage = () => {
                 currData.players[currData.lastPlayerRun].onTurn = true;
             }
 
-            update(ref(db, 'matches/' + matchId), currData);
+            update(ref(db, url + '/' + matchId), currData);
         }
     }
 
@@ -81,7 +80,7 @@ const MatchPage = () => {
             }
             currData.players[playerId].isViolation = !currData.players[playerId].isViolation
 
-            update(ref(db, 'matches/' + matchId), currData);
+            update(ref(db, url + '/' + matchId), currData);
         }
     }
 
@@ -92,7 +91,7 @@ const MatchPage = () => {
             currData.isPaused = true;
             currData.status = 0;
 
-            update(ref(db, 'matches/' + matchId), currData)
+            update(ref(db, url + '/' + matchId), currData)
                 .then(() => {
                     setShowModalFinished(false);
                     history.push('/');
@@ -211,7 +210,7 @@ const Modal = (props: {type: string, onOk?: any, onCancel: any, players?: Player
     }
 
     return (
-        <div className="modal-wrapper">
+        <div className="modal-wrapper z-50">
             <div className="modal-content w-11/12 md:w-1/4 rounded-lg shadow-lg">
                 <div className="modal-body p-5 text-center">
                     {bodyByType(type)}

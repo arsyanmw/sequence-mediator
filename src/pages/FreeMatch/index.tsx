@@ -29,7 +29,7 @@ const FreeMatchPage = () => {
     }, [matches])
 
     const onDelete = (matchId: number) => {
-        remove(ref(db, 'matches/free-play' + matchId))
+        remove(ref(db, 'matches/free-play/' + matchId))
             .then(() => window.location.reload());
     }
 
@@ -39,7 +39,7 @@ const FreeMatchPage = () => {
 
             {matches.length ? matches.map((match: Matches, idx: number) => (
                     <div className='flex justify-between items-center mb-5' key={idx}>
-                        <Link to={`/match/${idx}`} className='w-full'>
+                        <Link to={`/match/free-play/${idx}`} className='w-full'>
                             <div className='card-list p-3 w-100 flex justify-between items-center flex-row rounded-lg shadow-md'>
                                 <p>Match-{idx + 1} <span className={'px-2 rounded-full text-xs ' + (match?.status === 1 ? 'bg-lime-400' : 'bg-slate-400')}>{ match?.status === 1 ? 'On Going' : 'Finished' }</span></p>
                                 <div className='flex justify-center items-center'>{WinTag(match.players, match.winner)}</div>
