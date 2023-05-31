@@ -16,8 +16,8 @@ export interface Matches {
     winner: number | string,
     status: Statuses,
     players: Players[],
-    createdAt: Date,
-    endAt: Date,
+    createdAt: Date | string,
+    endAt: Date | string,
 
 }
 

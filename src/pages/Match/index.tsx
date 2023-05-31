@@ -52,7 +52,6 @@ const MatchPage = () => {
         let currData = match;
         if (currData) {
             currData.isPaused = !currData.isPaused;
-            
 
             if (currData.isPaused) {
                 currData.players.map((player, id) => {
@@ -90,6 +89,13 @@ const MatchPage = () => {
             currData.winner = winnerId;
             currData.isPaused = true;
             currData.status = 0;
+            currData.endAt = moment().format('DD/MM/YYYY HH:mm:ss');
+
+            let matchPlayers = currData.players;
+
+            matchPlayers.map((player, idx) => {
+                return matchPlayers[idx].onTurn = false;
+            })
 
             update(ref(db, url + '/' + matchId), currData)
                 .then(() => {
