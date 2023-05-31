@@ -21,10 +21,11 @@ const SettingsPage = () => {
         get(child(ref(db), 'matches/tournament/')).then(snapshot => {
             if (snapshot.exists()) {
                 const tournaments: Tournament[] = snapshot.val();
-                tournaments.find((tournament, idx) => {
+                tournaments.find(tournament => {
                     if (tournament.status === 1 && tournament.endAt === '') {
                         setOnGoingTournament(tournament);
                     }
+                    return true;
                 });
             }
         });
