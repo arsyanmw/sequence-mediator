@@ -53,3 +53,8 @@ export enum Statuses {
     ongoing,
     notstarted
 }
+
+export interface Settings {
+    tournamentMode: boolean;
+    withMediator: boolean;
+}

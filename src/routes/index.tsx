@@ -1,8 +1,9 @@
 import {FaHome} from "@react-icons/all-files/fa/FaHome";
 import {FaUsers} from "@react-icons/all-files/fa/FaUsers";
-import {FreeMatchPage, HomePage, MatchPage, PLayersPage, TournamentPage} from "../pages";
+import {FreeMatchPage, HomePage, MatchPage, PLayersPage, SettingsPage, TournamentPage} from "../pages";
 import {FaTrophy} from "@react-icons/all-files/fa/FaTrophy";
 import {FaTheaterMasks} from "@react-icons/all-files/fa/FaTheaterMasks";
+import {FaCog} from "@react-icons/all-files/fa/FaCog";
 
 export const routes = [
     {
@@ -47,6 +48,15 @@ export const routes = [
         title: 'Players',
         component: <PLayersPage />,
         icon: <FaUsers />,
+        show: true,
+        children: null
+    },
+    {
+        path: '/settings',
+        exact: true,
+        title: 'Settings',
+        component: <SettingsPage />,
+        icon: <FaCog />,
         show: true,
         children: null
     },
